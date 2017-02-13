@@ -1,3 +1,11 @@
+/*
+* File:         HCNode.h
+* Authors:      Jonathan Chiu (A12113428), Adrian Cordova (A12010305)
+* Class:        CSE 100, Winter 2017
+* Date:         2/13/2017
+*
+* Declaration of Huffman code nodes, made for the Huffman tree, in HCTree.h.
+*/
 #ifndef HCNODE_H
 #define HCNODE_H
 
@@ -20,9 +28,9 @@ public:
 
     HCNode(int count,
       byte symbol,
-      HCNode* c0 = 0,
-      HCNode* c1 = 0,
-      HCNode* p = 0)
+      HCNode* c0 = NULL,
+      HCNode* c1 = NULL,
+      HCNode* p = NULL)
         : count(count), symbol(symbol), c0(c0), c1(c1), p(p) { }
 
     /** Less-than comparison, so HCNodes will work in std::priority_queue
@@ -30,6 +38,17 @@ public:
      *  And we want to break ties deterministically.
      */
     bool operator<(const HCNode& other);
+
+    /*
+     * Check if the current node is a 0 child of the parent node.
+     */
+     bool isZeroChild();
+
+    /*
+     * Check if current node is a leaf node.
+     */
+     bool isLeaf();
+     
 };
 
 /** For printing an HCNode to an ostream

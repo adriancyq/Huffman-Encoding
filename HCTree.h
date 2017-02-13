@@ -1,3 +1,11 @@
+/*
+* File:         HCTree.h
+* Authors:      Jonathan Chiu (A12113428), Adrian Cordova (A12010305)
+* Class:        CSE 100, Winter 2017
+* Date:         2/13/2017
+*
+* Create a Huffman coding tree. Supports encoding and decoding.
+*/
 #ifndef HCTREE_H
 #define HCTREE_H
 
@@ -5,8 +13,8 @@
 #include <vector>
 #include <fstream>
 #include "HCNode.h"
-#include "BitInputStream.h"
-#include "BitOutputStream.h"
+//#include "BitInputStream.h"
+//#include "BitOutputStream.h"
 
 using namespace std;
 
@@ -40,7 +48,7 @@ public:
     ~HCTree();
 
     /** Use the Huffman algorithm to build a Huffman coding trie.
-     *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 
+     *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is
      *  the frequency of occurrence of byte i in the message.
      *  POSTCONDITION:  root points to the root of the trie,
      *  and leaves[i] points to the leaf node containing byte i.
@@ -52,13 +60,13 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    void encode(byte symbol, BitOutputStream& out) const;
+    //void encode(byte symbol, BitOutputStream& out) const;
 
     /** Write to the given ofstream
      *  the sequence of bits (as ASCII) coding the given symbol.
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
-     *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT 
+     *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT
      *  BE USED IN THE FINAL SUBMISSION.
      */
     void encode(byte symbol, ofstream& out) const;
@@ -68,9 +76,9 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    int decode(BitInputStream& in) const;
+    //int decode(BitInputStream& in) const;
 
-    /** Return the symbol coded in the next sequence of bits (represented as 
+    /** Return the symbol coded in the next sequence of bits (represented as
      *  ASCII text) from the ifstream.
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
