@@ -45,7 +45,21 @@ int main(int argc, char* argv[])
     outputFile << freqs[i] << endl;
   }
 
-  // Close the output stream
+  // Reopen the input file again
+  inputFile.open(inputFileName);
+
+  // Read in each byte and "encode" it
+  while (1) {
+    inputFile >> next;
+    if (inputFile.eof()) break;
+
+    // Write the encoded symbol to output file
+    huffman.encode(next, outputFile);
+  }
+
+  // Close input and output streams
+  inputFile.close();
   outputFile.close();
+
   return 0;
 }

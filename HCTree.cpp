@@ -94,7 +94,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
  * as ASCII text from the ifstream.
  */
 int HCTree::decode(ifstream& in) const
-{
+{ 
   unsigned char nextBit;
   HCNode * current = root;
 
