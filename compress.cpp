@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-
+#include <vector>
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -13,19 +13,28 @@ int main(int argc, char* argv[])
 
   ifstream inputFile;
   string fileName = argv[1];
-  int nextInt;
+  unsigned char next;
+  
+  vector<int> freqs(256);
 
   // Open file
   inputFile.open(fileName);
 
   // Read file
   while (1) {
-    inputFile >> nextInt;
-    if (inputFile.eof()) { break; }
-    cout << nextInt;
+    inputFile >> next;
+    if (inputFile.eof()) break;
+    freqs[next]++;
   }
 
   // Close the filestream
-  cout << endl;
   inputFile.close();
+  
+  // DEBUG: print the vector
+  for (int i = 0; i < 256; i++) {
+    cout << freqs[i];
+  }
+  
+  cout << endl;
+  return 0;
 }
