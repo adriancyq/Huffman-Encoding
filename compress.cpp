@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
   }
 
   // Close input and output streams
+  outputFile << endl;
   inputFile.close();
   outputFile.close();
 
