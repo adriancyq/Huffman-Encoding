@@ -102,13 +102,13 @@ int HCTree::decode(ifstream& in) const
   while (!current->isLeaf()) {
 
     // Get the next encoded "bit" represented as a char
-    in >> nextBit;
+    nextBit = in.get();
 
     // Hit end of file
     if (in.eof()) { return -1; }
 
     // Go down the appropriate path, depending on the "bit" read
-    if (nextBit == 0) {
+    if (nextBit == '0') {
       current = current->c0;
     }
     else {
@@ -117,7 +117,7 @@ int HCTree::decode(ifstream& in) const
   }
 
   // Hit a leaf, get the symbol
-  return (int) current->symbol;
+  return (unsigned char) current->symbol;
 }
 
 /*
