@@ -119,3 +119,21 @@ int HCTree::decode(ifstream& in) const
   // Hit a leaf, get the symbol
   return (int) current->symbol;
 }
+
+/*
+ * Destructor function for the Huffman tree.
+ */
+ HCTree::~HCTree()
+ {
+   // Delete all leaves if they exist
+   for (int i = 0; i < 256; i++) {
+     if (leaves[i]) {
+       delete leaves[i];
+     }
+   }
+
+   // Delete the root if it exists
+   if (root) {
+     delete root;
+   }
+ }
