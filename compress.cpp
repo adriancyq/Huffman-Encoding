@@ -1,24 +1,25 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "HCTree.h"
+#include "HCNode.h"
 using namespace std;
 
 int main(int argc, char* argv[])
 {
   // Check that user supplied filenames
-  if (argc < 2) {
-    cerr << "Pass in the input file." << endl;
+  if (argc < 3) {
+    cerr << "Pass in the input and output files." << endl;
     return -1;
   }
 
-  ifstream inputFile;
-  string fileName = argv[1];
-  unsigned char next;
-  
-  vector<int> freqs(256);
+  ifstream inputFile;           // Input stream
+  unsigned char next;           // Next char in the input stream
+  vector<int> freqs(256);       // Count of each char found
 
-  // Open file
-  inputFile.open(fileName);
+  // Open input filestream
+  string inputFileName = argv[1];
+  inputFile.open(inputFileName);
 
   // Read file
   while (1) {
@@ -27,14 +28,24 @@ int main(int argc, char* argv[])
     freqs[next]++;
   }
 
-  // Close the filestream
+  // Close the input filestream
   inputFile.close();
-  
-  // DEBUG: print the vector
+
+  // Build the Huffman tree using the populated frequency vector
+  HCTree huffman;
+  huffman.build(freqs);
+
+  // Open output filestream
+  ofstream outputFile;                  // Output stream
+  string outputFileName = argv[2];      // Name of output file
+  outputFile.open(outputFileName);
+
+  // Write out the frequencies in the output file for decoding
   for (int i = 0; i < 256; i++) {
-    cout << freqs[i];
+    outputFile << freqs[i] << endl;
   }
-  
-  cout << endl;
+
+  // Close the output stream
+  outputFile.close();
   return 0;
 }
