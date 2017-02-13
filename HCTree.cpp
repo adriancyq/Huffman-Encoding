@@ -31,7 +31,7 @@ void HCTree::build(const vector<int> & freqs)
   // Initialize forest of one node trees
   for (int i = 0; i < 256; i++) {
     if (freqs[i] != 0) {
-      leaves[i] = new HCNode(freqs[i], i);
+      leaves[i] = new HCNode(freqs[i], (unsigned char) i);
       treeBuilder.push(leaves[i]);
     }
   }
@@ -94,7 +94,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
  * as ASCII text from the ifstream.
  */
 int HCTree::decode(ifstream& in) const
-{ 
+{
   unsigned char nextBit;
   HCNode * current = root;
 
