@@ -30,8 +30,10 @@ void HCTree::build(const vector<int> & freqs)
 
   // Initialize forest of one node trees
   for (int i = 0; i < 256; i++) {
-    leaves[i] = new HCNode(freqs[i], i);
-    treeBuilder.push(leaves[i]);
+    if (freqs[i] != 0) {
+      leaves[i] = new HCNode(freqs[i], i);
+      treeBuilder.push(leaves[i]);
+    }
   }
 
   // Next lowest and second lowest priority HCNodes
