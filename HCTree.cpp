@@ -51,7 +51,7 @@ void HCTree::build(const vector<int> & freqs)
     treeBuilder.pop();
 
     // Create a new parent node for smallest-count roots
-    parent = new HCNode(t1->count + t2->count, t1->symbol, t2, t1);
+    parent = new HCNode(t1->count + t2->count, t1->symbol, t1, t2);
     t1->p = parent;
     t2->p = parent;
     treeBuilder.push(parent);
