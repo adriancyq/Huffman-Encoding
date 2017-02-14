@@ -39,6 +39,11 @@ private:
     HCNode* root;
     vector<HCNode*> leaves;
 
+    /*
+     * Destructor helper function.
+     */
+    void helperDestructor(HCNode* current);
+
 public:
     // explicit keyword is used to avoid accidental implicit conversions
     explicit HCTree() : root(0) {

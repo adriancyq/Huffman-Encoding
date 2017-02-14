@@ -31,7 +31,7 @@ void HCTree::build(const vector<int> & freqs)
   // Initialize forest of one node trees
   for (int i = 0; i < 256; i++) {
     if (freqs[i] != 0) {
-      leaves[i] = new HCNode(freqs[i], (unsigned char) i);
+      leaves[i] = new HCNode(freqs[i], i, NULL, NULL, NULL);
       treeBuilder.push(leaves[i]);
     }
   }
@@ -51,7 +51,7 @@ void HCTree::build(const vector<int> & freqs)
     treeBuilder.pop();
 
     // Create a new parent node for smallest-count roots
-    parent = new HCNode(t1->count + t2->count, t1->symbol, t1, t2);
+    parent = new HCNode((t1->count + t2->count), NULL, t1, t2, NULL);
     t1->p = parent;
     t2->p = parent;
     treeBuilder.push(parent);
@@ -69,10 +69,10 @@ void HCTree::build(const vector<int> & freqs)
 void HCTree::encode(byte symbol, ofstream& out) const
 {
   HCNode * current = leaves[(unsigned int) symbol];
-  stack<char> encoding;
+  stack<unsigned char> encoding;
 
   // Follow the path from leaf to root
-  while (current != root && current != NULL) {
+  while (current != root) {
 
     // Determine whether we took a 0 or 1 to go up
     if (current->isZeroChild()) { encoding.push('0'); }
@@ -84,7 +84,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
 
   // Write out the contents of the stack into the ofstream
   while (!encoding.empty()) {
-    out << encoding.top();
+    out << (unsigned char) encoding.top();
     encoding.pop();
   }
 }
@@ -100,12 +100,8 @@ int HCTree::decode(ifstream& in) const
 
   // Traverse until we hit a leaf node
   while (!current->isLeaf()) {
-
-    // Get the next encoded "bit" represented as a char
-    nextBit = in.get();
-
-    // Hit end of file
-    if (in.eof()) { return -1; }
+    nextBit = (unsigned char) in.get();           // Next bit in input stream
+    if (in.eof()) { return -1; }                  // Hit end of file
 
     // Go down the appropriate path, depending on the "bit" read
     if (nextBit == '0') {
@@ -123,17 +119,24 @@ int HCTree::decode(ifstream& in) const
 /*
  * Destructor function for the Huffman tree.
  */
- HCTree::~HCTree()
- {
-   // Delete all leaves if they exist
-   for (int i = 0; i < 256; i++) {
-     if (leaves[i]) {
-       delete leaves[i];
-     }
-   }
+HCTree::~HCTree()
+{
+  helperDestructor(root);
+}
 
-   // Delete the root if it exists
-   if (root) {
-     delete root;
-   }
- }
+ /*
+  * Recursive helper function for the destructor using postorder traversal.
+  */
+void helperDestructor(HCNode* current)
+{
+if (!current) { return; }
+
+// Go left first
+helperDestructor(current->c0);
+
+// Then go right
+helperDestructor(current->c1);
+
+// Delete current
+delete current;
+}
