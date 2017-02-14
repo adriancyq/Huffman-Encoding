@@ -87,6 +87,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
     out << (unsigned char) encoding.top();
     encoding.pop();
   }
+  out << "BING" <<endl; 
 }
 
 /*
@@ -127,7 +128,7 @@ HCTree::~HCTree()
  /*
   * Recursive helper function for the destructor using postorder traversal.
   */
-void helperDestructor(HCNode* current)
+void HCTree::helperDestructor(HCNode* current)
 {
 if (!current) { return; }
 

@@ -23,8 +23,10 @@ int main(int argc, char* argv[])
 
   // Read file
   while (1) {
-    inputFile >> next;
+    next = (unsigned int) inputFile.get();
     if (inputFile.eof()) break;
+    cerr << "BUILD FREQS" << endl;
+    cerr << (unsigned char) next << endl;
     freqs[next]++;
   }
 
@@ -46,20 +48,24 @@ int main(int argc, char* argv[])
   }
 
   // Reopen the input file again
-  inputFile.open(inputFileName);
+  ifstream secondPass;
+  secondPass.open(inputFileName);
+  outputFile << "BEGIN ENCODING" << endl;
 
   // Read in each byte and "encode" it
   while (1) {
-    inputFile >> next;
-    if (inputFile.eof()) break;
-
+    next = (unsigned int) secondPass.get();
+    if (secondPass.eof()) break;
+    cerr << "ENCODE: " << endl;
+    cerr << next << endl;
     // Write the encoded symbol to output file
-    huffman.encode(next, outputFile);
+    huffman.encode((unsigned char) next, outputFile);
   }
 
   // Close input and output streams
   outputFile << endl;
-  inputFile.close();
+  outputFile << "WE END HERE" << endl;
+  secondPass.close();
   outputFile.close();
 
   return 0;

@@ -22,12 +22,12 @@ using namespace std;
 bool HCNode::operator<(const HCNode& other)
 {
   // Counts are different, lower count has higher priority
-  if (count != other.count) {
-    return count > other.count;
-  }
+  //if (count != other.count) {
+    //return count > other.count;
+  //}
 
   // Counts are same, compare by symbol
-  return symbol > other.symbol;
+  return other.count <= this->count;
 }
 
 /*
