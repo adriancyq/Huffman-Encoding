@@ -87,6 +87,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
     out << (unsigned char) encoding.top();
     encoding.pop();
   }
+  out << "BING" <<endl; 
 }
 
 /*
