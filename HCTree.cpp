@@ -31,7 +31,7 @@ void HCTree::build(const vector<int> & freqs)
   // Initialize forest of one node trees
   for (int i = 0; i < 256; i++) {
     if (freqs[i] != 0) {
-      leaves[i] = new HCNode(freqs[i], i, NULL, NULL, NULL);
+      leaves[i] = new HCNode(freqs[i], i);
       treeBuilder.push(leaves[i]);
     }
   }
@@ -68,11 +68,11 @@ void HCTree::build(const vector<int> & freqs)
  */
 void HCTree::encode(byte symbol, ofstream& out) const
 {
-  HCNode * current = leaves[(unsigned int) symbol];
+  HCNode * current = leaves[symbol];
   stack<unsigned char> encoding;
 
   // Follow the path from leaf to root
-  while (current != root) {
+  while (current->parent) {
 
     // Determine whether we took a 0 or 1 to go up
     if (current->isZeroChild()) { encoding.push('0'); }
@@ -87,7 +87,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
     out << (unsigned char) encoding.top();
     encoding.pop();
   }
-  out << "BING" <<endl; 
+  out << "BING" <<endl;
 }
 
 /*
@@ -96,12 +96,12 @@ void HCTree::encode(byte symbol, ofstream& out) const
  */
 int HCTree::decode(ifstream& in) const
 {
-  unsigned char nextBit;
+  int nextBit;
   HCNode * current = root;
 
   // Traverse until we hit a leaf node
   while (!current->isLeaf()) {
-    nextBit = (unsigned char) in.get();           // Next bit in input stream
+    nextBit = in.get();           // Next bit in input stream
     if (in.eof()) { return -1; }                  // Hit end of file
 
     // Go down the appropriate path, depending on the "bit" read
@@ -114,7 +114,7 @@ int HCTree::decode(ifstream& in) const
   }
 
   // Hit a leaf, get the symbol
-  return (unsigned char) current->symbol;
+  return current->symbol;
 }
 
 /*

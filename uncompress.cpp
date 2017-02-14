@@ -35,14 +35,13 @@ int main(int argc, char* argv[])
   ofstream outputFile;                  // Output stream
   string outputFileName = argv[2];      // Name of output file
   outputFile.open(outputFileName);
-  int result;
 
   while (1) {
 
     // Read the next byte
-    result = huffman.decode(inputFile);
+    int result = huffman.decode(inputFile);
     if (result == -1) break;
-    outputFile << (unsigned char) result;
+    outputFile << (byte) result;
   }
 
   // Close input and output streams
