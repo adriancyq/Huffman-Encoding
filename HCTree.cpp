@@ -51,7 +51,7 @@ void HCTree::build(const vector<int> & freqs)
     treeBuilder.pop();
 
     // Create a new parent node for smallest-count roots
-    parent = new HCNode((t1->count + t2->count), NULL, t1, t2, NULL);
+    parent = new HCNode((t1->count + t2->count), 0, t1, t2, NULL);
     t1->p = parent;
     t2->p = parent;
     treeBuilder.push(parent);
@@ -127,16 +127,16 @@ HCTree::~HCTree()
  /*
   * Recursive helper function for the destructor using postorder traversal.
   */
-void helperDestructor(HCNode* current)
+void HCTree::helperDestructor(HCNode* current)
 {
-if (!current) { return; }
+  if (!current) { return; }
 
-// Go left first
-helperDestructor(current->c0);
+  // Go left first
+  helperDestructor(current->c0);
 
-// Then go right
-helperDestructor(current->c1);
+  // Then go right
+  helperDestructor(current->c1);
 
-// Delete current
-delete current;
+  // Delete current
+  delete current;
 }

@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
   }
 
   ifstream inputFile;           // Input stream
-  unsigned char next;           // Next char in the input stream
+  unsigned int next;           // Next char in the input stream
   vector<int> freqs(256);       // Count of each char found
 
   // Open input filestream
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 
   // Read file
   while (1) {
-    inputFile >> next;
+    next = (unsigned int) inputFile.get();
     if (inputFile.eof()) break;
     freqs[next]++;
   }
