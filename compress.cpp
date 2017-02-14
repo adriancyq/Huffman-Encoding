@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 
   ifstream inputFile;           // Input stream
   unsigned int next;           // Next char in the input stream
-  vector<int> freqs(256);       // Count of each char found
+  vector<int> freqs(256, 0);       // Count of each char found
 
   // Open input filestream
   string inputFileName = argv[1];
@@ -25,8 +25,6 @@ int main(int argc, char* argv[])
   while (1) {
     next = (unsigned int) inputFile.get();
     if (inputFile.eof()) break;
-    cerr << "BUILD FREQS" << endl;
-    cerr << (unsigned char) next << endl;
     freqs[next]++;
   }
 

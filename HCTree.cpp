@@ -29,8 +29,8 @@ void HCTree::build(const vector<int> & freqs)
   priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> treeBuilder;
 
   // Initialize forest of one node trees
-  for (int i = 0; i < 256; i++) {
-    if (freqs[i] != 0) {
+  for (int i = 0; i < freqs.size(); i++) {
+    if (freqs[i]) {
       leaves[i] = new HCNode(freqs[i], i);
       treeBuilder.push(leaves[i]);
     }
@@ -51,7 +51,7 @@ void HCTree::build(const vector<int> & freqs)
     treeBuilder.pop();
 
     // Create a new parent node for smallest-count roots
-    parent = new HCNode((t1->count + t2->count), 0, t1, t2, NULL);
+    parent = new HCNode((t1->count + t2->count), 0, t1, t2);
     t1->p = parent;
     t2->p = parent;
     treeBuilder.push(parent);
@@ -69,7 +69,7 @@ void HCTree::build(const vector<int> & freqs)
 void HCTree::encode(byte symbol, ofstream& out) const
 {
   HCNode * current = leaves[symbol];
-  stack<unsigned char> encoding;
+  stack<int> encoding;
 
   // Follow the path from leaf to root
   while (current->p) {
@@ -107,7 +107,7 @@ int HCTree::decode(ifstream& in) const
     if (nextBit == '0') {
       current = current->c0;
     }
-    else {
+    else if (nextBit == '1'){
       current = current->c1;
     }
   }

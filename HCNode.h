@@ -28,9 +28,9 @@ public:
 
     HCNode(int count,
       byte symbol,
-      HCNode* c0 = NULL,
-      HCNode* c1 = NULL,
-      HCNode* p = NULL)
+      HCNode* c0 = 0,
+      HCNode* c1 = 0,
+      HCNode* p = 0)
         : count(count), symbol(symbol), c0(c0), c1(c1), p(p) { }
 
     /** Less-than comparison, so HCNodes will work in std::priority_queue
@@ -48,7 +48,7 @@ public:
      * Check if current node is a leaf node.
      */
      bool isLeaf();
-     
+
 };
 
 /** For printing an HCNode to an ostream
