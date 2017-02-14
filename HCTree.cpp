@@ -72,7 +72,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
   stack<unsigned char> encoding;
 
   // Follow the path from leaf to root
-  while (current->parent) {
+  while (current->p) {
 
     // Determine whether we took a 0 or 1 to go up
     if (current->isZeroChild()) { encoding.push('0'); }
@@ -87,7 +87,6 @@ void HCTree::encode(byte symbol, ofstream& out) const
     out << (unsigned char) encoding.top();
     encoding.pop();
   }
-  out << "BING" <<endl;
 }
 
 /*

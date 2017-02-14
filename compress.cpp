@@ -50,21 +50,19 @@ int main(int argc, char* argv[])
   // Reopen the input file again
   ifstream secondPass;
   secondPass.open(inputFileName);
-  outputFile << "BEGIN ENCODING" << endl;
 
   // Read in each byte and "encode" it
   while (1) {
     next = (unsigned int) secondPass.get();
     if (secondPass.eof()) break;
-    cerr << "ENCODE: " << endl;
     cerr << next << endl;
+
     // Write the encoded symbol to output file
     huffman.encode((unsigned char) next, outputFile);
   }
 
   // Close input and output streams
   outputFile << endl;
-  outputFile << "WE END HERE" << endl;
   secondPass.close();
   outputFile.close();
 
