@@ -39,8 +39,8 @@ int main(int argc, char* argv[])
   while (1) {
 
     // Read the next byte
-    byte result = huffman.decode(inputFile);
-    if (result == (byte) -1) break;
+    int result = huffman.decode(inputFile);
+    if (result == -1) break;
     outputFile << (byte) result;
   }
 

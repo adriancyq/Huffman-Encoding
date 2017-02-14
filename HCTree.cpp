@@ -36,30 +36,27 @@ void HCTree::build(const vector<int> & freqs)
     }
   }
 
-  // Next lowest and second lowest priority HCNodes
-  HCNode* t1 = NULL;
-  HCNode* t2 = NULL;
-  HCNode* parent;
-
   // construct the Huffman tree
   while (treeBuilder.size() > 1) {
 
     // Select two smallest-count roots
-    t1 = treeBuilder.top();
+    HCNode * t1 = treeBuilder.top();
     treeBuilder.pop();
-    t2 = treeBuilder.top();
+    HCNode * t2 = treeBuilder.top();
     treeBuilder.pop();
 
     // Create a new parent node for smallest-count roots
-    parent = new HCNode((t1->count + t2->count), 0, t1, t2);
+    int total = t1->count + t2->count;
+    HCNode * parent = new HCNode(total, 0, t1, t2);
     t1->p = parent;
     t2->p = parent;
     treeBuilder.push(parent);
   }
 
-  // Priority queue will now only contain the root of the Huffman tree
-  root = treeBuilder.top();
-  treeBuilder.pop();
+  //The remaining node in the queue will be set as root
+  if(treeBuilder.size() == 1) {
+    root = treeBuilder.top();
+  }
 }
 
 
@@ -72,11 +69,15 @@ void HCTree::encode(byte symbol, ofstream& out) const
   stack<int> encoding;
 
   // Follow the path from leaf to root
-  while (current->p) {
+  while (current != root) {
 
     // Determine whether we took a 0 or 1 to go up
-    if (current->isZeroChild()) { encoding.push('0'); }
-    else { encoding.push('1'); }
+    if (current->isZeroChild()) {
+      encoding.push(0);
+    }
+    else {
+      encoding.push(1);
+    }
 
     // Move up one level
     current = current->p;
@@ -84,7 +85,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
 
   // Write out the contents of the stack into the ofstream
   while (!encoding.empty()) {
-    out << (unsigned char) encoding.top();
+    out << encoding.top();
     encoding.pop();
   }
 }
@@ -100,8 +101,11 @@ int HCTree::decode(ifstream& in) const
 
   // Traverse until we hit a leaf node
   while (!current->isLeaf()) {
-    nextBit = in.get();           // Next bit in input stream
-    if (in.eof()) { return -1; }                  // Hit end of file
+    nextBit = in.get();
+    if (in.eof()) return -1;
+
+    // DEBUG: print bit read
+    cerr << "Next bit read: " << nextBit << endl;
 
     // Go down the appropriate path, depending on the "bit" read
     if (nextBit == '0') {
@@ -113,6 +117,8 @@ int HCTree::decode(ifstream& in) const
   }
 
   // Hit a leaf, get the symbol
+  //DEBUG: found symbol
+  cerr << "Found symbol." << endl;
   return current->symbol;
 }
 
