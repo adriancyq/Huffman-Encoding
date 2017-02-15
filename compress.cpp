@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
   }
 
   ifstream inputFile;              // Input stream
-  unsigned int next;               // Next char in the input stream
+  int next;                        // Next char in the input stream
   vector<int> freqs(256, 0);       // Count of each char found
 
   // Open input filestream
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 
   // Read file
   while (1) {
-    next = (unsigned int) inputFile.get();
+    next = inputFile.get();
     if (inputFile.eof()) break;
     freqs[next]++;
   }
@@ -51,16 +51,15 @@ int main(int argc, char* argv[])
 
   // Read in each byte and "encode" it
   while (1) {
-    next = (unsigned int) secondPass.get();
+    next = secondPass.get();
     if (secondPass.eof()) break;
     cerr << next << endl;
 
     // Write the encoded symbol to output file
-    huffman.encode((unsigned char) next, outputFile);
+    huffman.encode((byte) next, outputFile);
   }
 
   // Close input and output streams
-  outputFile << endl;
   secondPass.close();
   outputFile.close();
 

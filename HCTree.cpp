@@ -53,9 +53,20 @@ void HCTree::build(const vector<int> & freqs)
     treeBuilder.push(parent);
   }
 
-  //The remaining node in the queue will be set as root
-  if(treeBuilder.size() == 1) {
+  // The remaining node in the queue will be set as root
+  if (treeBuilder.size() == 1) {
     root = treeBuilder.top();
+  }
+
+  for (int i = 0; i < 256; i++) {
+    if (leaves[i]) {
+      if (leaves[i]->c0) {
+        cerr << "Leaf " << i << " has a left child." << endl;
+      }
+      if (leaves[i]->c1) {
+        cerr << "Leaf " << i << " has a right child." << endl;
+      }
+    }
   }
 }
 
@@ -118,8 +129,8 @@ int HCTree::decode(ifstream& in) const
 
   // Hit a leaf, get the symbol
   //DEBUG: found symbol
-  cerr << "Found symbol." << endl;
-  return current->symbol;
+  cerr << "Found symbol: " << (unsigned int) current->symbol << endl;
+  return (int) current->symbol;
 }
 
 /*
