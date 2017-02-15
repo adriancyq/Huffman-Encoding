@@ -27,12 +27,14 @@ using namespace std;
 void HCTree::build(const vector<int> & freqs)
 {
   priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> treeBuilder;
+  HCNode * newLeaf;
 
   // Initialize forest of one node trees
   for (int i = 0; i < freqs.size(); i++) {
     if (freqs[i]) {
-      leaves[i] = new HCNode(freqs[i], i);
-      treeBuilder.push(leaves[i]);
+      newLeaf = new HCNode(freqs[i], i);
+      leaves[i] = newLeaf;
+      treeBuilder.push(newLeaf);
     }
   }
 
@@ -56,17 +58,6 @@ void HCTree::build(const vector<int> & freqs)
   // The remaining node in the queue will be set as root
   if (treeBuilder.size() == 1) {
     root = treeBuilder.top();
-  }
-
-  for (int i = 0; i < 256; i++) {
-    if (leaves[i]) {
-      if (leaves[i]->c0) {
-        cerr << "Leaf " << i << " has a left child." << endl;
-      }
-      if (leaves[i]->c1) {
-        cerr << "Leaf " << i << " has a right child." << endl;
-      }
-    }
   }
 }
 
@@ -115,9 +106,6 @@ int HCTree::decode(ifstream& in) const
     nextBit = in.get();
     if (in.eof()) return -1;
 
-    // DEBUG: print bit read
-    cerr << "Next bit read: " << nextBit << endl;
-
     // Go down the appropriate path, depending on the "bit" read
     if (nextBit == '0') {
       current = current->c0;
@@ -128,8 +116,6 @@ int HCTree::decode(ifstream& in) const
   }
 
   // Hit a leaf, get the symbol
-  //DEBUG: found symbol
-  cerr << "Found symbol: " << (unsigned int) current->symbol << endl;
   return (int) current->symbol;
 }
 

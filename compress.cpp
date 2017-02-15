@@ -53,7 +53,6 @@ int main(int argc, char* argv[])
   while (1) {
     next = secondPass.get();
     if (secondPass.eof()) break;
-    cerr << next << endl;
 
     // Write the encoded symbol to output file
     huffman.encode((byte) next, outputFile);

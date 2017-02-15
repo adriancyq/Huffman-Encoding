@@ -13,8 +13,8 @@ int main(int argc, char* argv[])
   }
 
   ifstream inputFile;           // Input stream
-  unsigned char next;           // Next char in the input stream
-  vector<int> freqs(256);       // Count of each char found
+  int next;           // Next char in the input stream
+  vector<int> freqs(256, 0);       // Count of each char found
 
   // Open input filestream
   string inputFileName = argv[1];
