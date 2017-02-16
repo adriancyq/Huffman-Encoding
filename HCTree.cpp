@@ -90,7 +90,6 @@ void HCTree::encode(byte symbol, ofstream& out) const
     out << encoding.top();
     encoding.pop();
   }
-  out << endl;
 }
 
 /*
