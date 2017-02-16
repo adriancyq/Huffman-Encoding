@@ -2,7 +2,7 @@
 * File:         HCTree.cpp
 * Authors:      Jonathan Chiu (A12113428), Adrian Cordova (A12010305)
 * Class:        CSE 100, Winter 2017
-* Date:         2/13/2017
+* Date:         2/15/2017
 *
 * Implementation of Huffman algorithm to build the Huffman coding tree, as
 * well as encoding and decoding.
@@ -49,7 +49,7 @@ void HCTree::build(const vector<int> & freqs)
 
     // Create a new parent node for smallest-count roots
     int total = t1->count + t2->count;
-    HCNode * parent = new HCNode(total, 0, t1, t2);
+    HCNode * parent = new HCNode(total, 0, t2, t1);
     t1->p = parent;
     t2->p = parent;
     treeBuilder.push(parent);
@@ -90,6 +90,7 @@ void HCTree::encode(byte symbol, ofstream& out) const
     out << encoding.top();
     encoding.pop();
   }
+  out << endl;
 }
 
 /*

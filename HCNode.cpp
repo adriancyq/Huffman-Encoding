@@ -2,7 +2,7 @@
 * File:         HCNode.cpp
 * Authors:      Jonathan Chiu (A12113428), Adrian Cordova (A12010305)
 * Class:        CSE 100, Winter 2017
-* Date:         2/13/2017
+* Date:         2/15/2017
 *
 * Implementation of Huffman code nodes for the Huffman tree.
 */
@@ -27,7 +27,7 @@ bool HCNode::operator<(const HCNode& other)
   }
 
   // Counts are same, compare by symbol
-  return symbol < other.symbol;
+  return symbol > other.symbol;
 }
 
 /*

@@ -1,3 +1,13 @@
+/*
+* File:         compress.cpp
+* Authors:      Jonathan Chiu (A12113428), Adrian Cordova (A12010305)
+* Class:        CSE 100, Winter 2017
+* Date:         2/15/2017
+*
+* Read in the input file, build a Huffman encoding tree, and encode the
+* message. Takes two command line arguments: (1) the input file, and (2) the
+* output file (where we will write the encoded message).
+*/
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -13,9 +23,9 @@ int main(int argc, char* argv[])
     return -1;
   }
 
-  ifstream inputFile;              // Input stream
-  int next;                        // Next char in the input stream
-  vector<int> freqs(256, 0);       // Count of each char found
+  ifstream inputFile;                   // Input stream
+  int next;                             // Next char in the input stream
+  vector<int> freqs(256, 0);            // Count of each char found
 
   // Open input filestream
   string inputFileName = argv[1];

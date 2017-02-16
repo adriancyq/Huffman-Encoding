@@ -2,7 +2,7 @@
 * File:         HCNode.h
 * Authors:      Jonathan Chiu (A12113428), Adrian Cordova (A12010305)
 * Class:        CSE 100, Winter 2017
-* Date:         2/13/2017
+* Date:         2/15/2017
 *
 * Declaration of Huffman code nodes, made for the Huffman tree, in HCTree.h.
 */
