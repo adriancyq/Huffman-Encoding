@@ -33,19 +33,24 @@ int main(int argc, char* argv[])
   // Open input filestream
   string inputFileName = argv[1];
   inputFile.open(inputFileName, ios::binary);
+  BitInputStream bistream(inputFile);
 
   // Reconstruct the freqs vector to reconstruct the Huffman tree
   cout << "Reading header from file \"" << inputFileName << "\"... ";
-  for (int i = 0; i < 256; i++) {
-    inputFile >> next;
-    freqs[i] = next;
 
-    // Found an occurring char to decode
-    if (next > 0) {
-      totalBytes += next;
-      totalUniqueSymbols++;
-      cerr << "Character " << i << ": " << next << endl;
-    }
+  // Get the number of unique symbols and total number of symbols
+  totalUniqueSymbols = bistream.readByte();
+  totalBytes = bistream.readInt();
+
+  // Populate frequencies vector
+  for (int i = 0; i < totalUniqueSymbols; i++) {
+
+    // Get the symbol and its frequency
+    int index = bistream.readByte();
+    int frequency = bistream.readInt();
+
+    // Assign frequency to specified char
+    freqs[index] = frequency;
   }
 
   // INFO: Print stats on input file
@@ -64,11 +69,7 @@ int main(int argc, char* argv[])
   string outputFileName = argv[2];      // Name of output file
   cout << "Writing to file \"" << outputFileName << "\"... ";
   outputFile.open(outputFileName, ios::binary);
-  BitInputStream bistream(inputFile);
 
-  // FIXME Gets the last newline character after the 256th frequency
-  inputFile.get();
-  
   // Read all expected bytes
   for (int i = 0; i < totalBytes; i++) {
     if (inputFile.eof()) { break; }
@@ -81,5 +82,26 @@ int main(int argc, char* argv[])
   cout << "done." << endl;
   inputFile.close();
   outputFile.close();
+
+  // Get the filesize of the decoded file
+  streampos begin, end;
+  ifstream decodedFile(outputFileName, ios::binary);
+  begin = decodedFile.tellg();              // Get the beginning
+  decodedFile.seekg(0, ios::end);           // Move to the end
+  end = decodedFile.tellg();                // Get the end
+  decodedFile.close();
+  int decodedFileSize = end - begin;
+
+  // Get the filesize of the encoded file
+  ifstream encodedFile(inputFileName, ios::binary);
+  begin = encodedFile.tellg();              // Get the beginning
+  encodedFile.seekg(0, ios::end);           // Move to the end
+  end = encodedFile.tellg();                // Get the end
+  encodedFile.close();
+  int encodedFileSize = end - begin;
+
+
+  // Print the compression ratio
+  cout << "Uncompression ratio: " << (float) decodedFileSize / encodedFileSize << endl;
   return 0;
 }

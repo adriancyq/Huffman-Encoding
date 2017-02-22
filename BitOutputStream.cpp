@@ -43,3 +43,28 @@ void BitOutputStream::flush() {
 	buffer = 0;
 	numBits = 0;
 }
+
+/*
+ * Write a single byte (8 bits) to the output stream.
+ */
+void BitOutputStream::writeByte(int byte) {
+  out.put(byte);
+}
+
+/*
+ * Write a four byte integer to the output stream by breaking it up by bytes.
+ */
+void BitOutputStream::writeInt(int number) {
+
+	// Break the four byte integer to four one-byte pieces
+	char part1 = number & 255;
+	char part2 = (number >> 8) & (255);
+	char part3 = (number >> 16) & (255);
+	char part4 = (number >> 24) & (255);
+
+	// Write out each part individually
+	out.put(part1);
+	out.put(part2);
+	out.put(part3);
+	out.put(part4);
+}

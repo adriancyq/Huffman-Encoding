@@ -33,4 +33,14 @@ class BitOutputStream {
      * Write bit to the bitwise buffer.
      */
     void writeBit(unsigned int bit);
+
+    /*
+     * Write a single byte directly to the output stream.
+     */
+    void writeByte(int byte);
+
+    /*
+     * Write a four byte int to the output stream.
+     */
+     void writeInt(int number);
 };

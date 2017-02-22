@@ -30,3 +30,29 @@ unsigned int BitInputStream::readBit() {
   // Bit of interest is 0
   else { return 0; }
 }
+
+/*
+ * Read a four-byte int directly from the input stream.
+ */
+int BitInputStream::readByte() {
+  return in.get();
+}
+
+/*
+ * Read a single byte from the input stream.
+ */
+int BitInputStream::readInt() {
+
+  // Get all four bytes of the four-byte int
+  int part1 = in.get();
+  int part2 = in.get();
+  int part3 = in.get();
+  int part4 = in.get();
+
+  // Assemble the int back together
+  int result = part1;
+  result |= (part2 << 8);
+  result |= (part3 << 16);
+  result |= (part4 << 24);
+  return result;
+}

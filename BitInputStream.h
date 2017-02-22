@@ -32,4 +32,14 @@ class BitInputStream {
      * Read bit from the bitwise buffer.
      */
     unsigned int readBit();
+
+    /*
+     * Read a four-byte int directly from the input stream.
+     */
+    int readInt();
+
+    /*
+     * Read a single byte from the input stream.
+     */
+    int readByte();
 };

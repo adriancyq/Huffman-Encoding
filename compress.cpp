@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
   inputFile.open(inputFileName, ios::binary);
   BitInputStream bistream(inputFile);
 
-  // Read file change
+  // Read file to be encoded
   cout << "Reading from \"" << inputFileName << "\"... ";
   while (1) {
     next = inputFile.get();
@@ -68,17 +68,27 @@ int main(int argc, char* argv[])
   ofstream outputFile;                  // Output stream
   string outputFileName = argv[2];      // Name of output file
   outputFile.open(outputFileName, ios::binary);
+  BitOutputStream bostream(outputFile);
+  cout << "Writing to file \"" << outputFileName << "\"...";
+
+  // Write out total number of unique symbols (no more than 256)
+  // and total number of symbols
+  bostream.writeByte(totalUniqueSymbols);
+  bostream.writeInt(totalBytes);
 
   // Write out the frequencies in the output file for decoding
-  cout << "Writing to file \"" << outputFileName << "\"...";
+  // Optimized: Write out only the nonzero frequencies and the corresponding
+  // char
   for (int i = 0; i < 256; i++) {
-    outputFile << freqs[i] << endl;
+    if (freqs[i] > 0) {
+      bostream.writeByte(i);
+      bostream.writeInt(freqs[i]);
+    }
   }
 
   // Reopen the input file again
   ifstream secondPass;
   secondPass.open(inputFileName, ios::binary);
-  BitOutputStream bostream(outputFile);
 
   // Read in each byte and "encode" it
   while (1) {
@@ -97,5 +107,26 @@ int main(int argc, char* argv[])
   outputFile.close();
   cout << "done." << endl;
 
+  // Get the filesize of the encoded file
+  streampos begin, end;
+  ifstream encodedFile(outputFileName, ios::binary);
+  begin = encodedFile.tellg();              // Get the beginning
+  encodedFile.seekg(0, ios::end);           // Move to the end
+  end = encodedFile.tellg();                // Get the end
+  encodedFile.close();
+  int encodedFileSize = end - begin;
+
+  cout << "Output file has size " << encodedFileSize << " bytes." << endl;
+
+  // Get the filesize of the original file
+  ifstream originalFile(inputFileName, ios::binary);
+  begin = originalFile.tellg();              // Get the beginning
+  originalFile.seekg(0, ios::end);           // Move to the end
+  end = originalFile.tellg();                // Get the end
+  originalFile.close();
+  int originalFileSize = end - begin;
+
+  // Print the compression ratio
+  cout << "Compression ratio: " << (float) encodedFileSize / originalFileSize << endl;
   return 0;
 }
