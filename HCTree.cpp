@@ -62,11 +62,12 @@ void HCTree::build(const vector<int> & freqs)
 }
 
 
-/*
- * Write to the given ofstream the sequence of bits coding the given symbol.
+/** Write to the given BitOutputStream
+ *  the sequence of bits coding the given symbol.
+ *  PRECONDITION: build() has been called, to create the coding
+ *  tree, and initialize root pointer and leaves vector.
  */
-void HCTree::encode(byte symbol, ofstream& out) const
-{
+void encode(byte symbol, BitOutputStream& out) const {
   HCNode * current = leaves[symbol];
   stack<int> encoding;
 
@@ -87,30 +88,30 @@ void HCTree::encode(byte symbol, ofstream& out) const
 
   // Write out the contents of the stack into the ofstream
   while (!encoding.empty()) {
-    out << encoding.top();
+    out.writeBit(encoding.top());
     encoding.pop();
   }
 }
 
-/*
- * Return the symbol coded in the next sequence of bits that are represented
- * as ASCII text from the ifstream.
+
+/** Return symbol coded in the next sequence of bits from the stream.
+ *  PRECONDITION: build() has been called, to create the coding
+ *  tree, and initialize root pointer and leaves vector.
  */
-int HCTree::decode(ifstream& in) const
-{
+int decode(BitInputStream& in) const {
   int nextBit;
   HCNode * current = root;
 
   // Traverse until we hit a leaf node
   while (!current->isLeaf()) {
-    nextBit = in.get();
+    nextBit = in.readBit();
     if (in.eof()) return -1;
 
     // Go down the appropriate path, depending on the "bit" read
-    if (nextBit == '0') {
+    if (nextBit == 0) {
       current = current->c0;
     }
-    else if (nextBit == '1'){
+    else if (nextBit == 1){
       current = current->c1;
     }
   }
@@ -118,6 +119,7 @@ int HCTree::decode(ifstream& in) const
   // Hit a leaf, get the symbol
   return (int) current->symbol;
 }
+
 
 /*
  * Destructor function for the Huffman tree.
