@@ -13,8 +13,6 @@
 #include <vector>
 #include "HCTree.h"
 #include "HCNode.h"
-#include "BitOutputStream.h"
-#include "BitInputStream.h"
 using namespace std;
 
 int main(int argc, char* argv[])
