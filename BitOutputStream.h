@@ -6,9 +6,10 @@
 *
 * 
 */
-#ifndef BOSTREAM_HPP
+
 #define BOSTREAM_HPP
 #include <fstream>
+using namespace std;
 
 class BitOutputStream {
     private:
@@ -29,15 +30,5 @@ class BitOutputStream {
         }
 
         // write bit to the bitwise buffer
-        void writeBit(unsigned int bit) {
-            // flush the bitwise buffer if it is full
-            if(numbits == 8) {
-                flush();
-            }
-
-            // set the next open bit of the bitwise buffer to 'bit' (how?)
-
-            // increment the number of bits in our bitwise buffer
-            numbits++;
-        }
+        void writeBit(unsigned int bit);
 };

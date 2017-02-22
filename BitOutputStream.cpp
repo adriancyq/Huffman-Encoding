@@ -12,14 +12,11 @@
 #include <fstream>
 
 using namespace std;
-BitOutputStream::~BitOutputStream(){
-	if (numbits) flush();
-}
 
-void BitOutputStream::writeBit(int x) {
-	
+void BitOutputStream::writeBit(unsigned int bit) {
+
 	if (out.good()){
-		int y = x << (7 - numbits);
+		int y = bit << (7 - numbits);
 		buffer |= y;
 
 		numbits++;
@@ -32,3 +29,5 @@ void BitOutputStream::writeBit(int x) {
 		flush();
 	}
 }
+
+
