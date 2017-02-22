@@ -11,7 +11,7 @@ void BitInputStream::fill() {
 
 }
 
-unsigned int BitInputStream::readbit() {
+unsigned int BitInputStream::readBit() {
 
   // All the bits in the buffer have been read, get new bits
   if (numBits == 8) {
@@ -28,5 +28,5 @@ unsigned int BitInputStream::readbit() {
   if (nextBit > 0) { return 1; }
 
   // Bit of interest is 0
-  else { return 0; }  
+  else { return 0; }
 }
