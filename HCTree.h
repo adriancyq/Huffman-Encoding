@@ -13,8 +13,8 @@
 #include <vector>
 #include <fstream>
 #include "HCNode.h"
-//#include "BitInputStream.h"
-//#include "BitOutputStream.h"
+#include "BitInputStream.h"
+#include "BitOutputStream.h"
 
 using namespace std;
 

@@ -67,7 +67,7 @@ void HCTree::build(const vector<int> & freqs)
  *  PRECONDITION: build() has been called, to create the coding
  *  tree, and initialize root pointer and leaves vector.
  */
-void encode(byte symbol, BitOutputStream& out) const {
+void HCTree::encode(byte symbol, BitOutputStream& out) const {
   HCNode * current = leaves[symbol];
   stack<int> encoding;
 
@@ -98,14 +98,13 @@ void encode(byte symbol, BitOutputStream& out) const {
  *  PRECONDITION: build() has been called, to create the coding
  *  tree, and initialize root pointer and leaves vector.
  */
-int decode(BitInputStream& in) const {
+int HCTree::decode(BitInputStream& in) const {
   int nextBit;
   HCNode * current = root;
 
   // Traverse until we hit a leaf node
   while (!current->isLeaf()) {
     nextBit = in.readBit();
-    if (in.eof()) return -1;
 
     // Go down the appropriate path, depending on the "bit" read
     if (nextBit == 0) {
