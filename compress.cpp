@@ -25,8 +25,9 @@ int main(int argc, char* argv[])
   }
 
   ifstream inputFile;                   // Input stream
-  int next;   
-  byte buffer;                          // Next char in the input stream
+  int next;                             // Next char read
+  int totalBytes = 0;                   // Total number of chars in the file
+  int totalUniqueSymbols = 0;           // Total number of unique chars in file
   vector<int> freqs(256, 0);            // Count of each char found
 
   // Open input filestream
@@ -35,18 +36,33 @@ int main(int argc, char* argv[])
   BitInputStream bistream(inputFile);
 
   // Read file change
-  while (!inputFile.eof()) {
-    buffer = inputFile.get();
-    next = (int)buffer;
+  cout << "Reading from \"" << inputFileName << "\"... ";
+  while (1) {
+    next = inputFile.get();
+    if (inputFile.eof()) break;
     freqs[next]++;
+    totalBytes++;
+
+    // Found a new, unique symbol
+    if (freqs[next] == 1) {
+      totalUniqueSymbols++;
+    }
   }
+
+  // Print stats on input file
+  cout << "done." << endl;
+  cout << "Found " << totalUniqueSymbols
+      << " unique symbols in the input file of size "
+      << totalBytes << " bytes." << endl;
 
   // Close the input filestream
   inputFile.close();
 
   // Build the Huffman tree using the populated frequency vector
+  cout << "Building Huffman code tree...";
   HCTree huffman;
   huffman.build(freqs);
+  cout << "done." << endl;
 
   // Open output filestream
   ofstream outputFile;                  // Output stream
@@ -54,6 +70,7 @@ int main(int argc, char* argv[])
   outputFile.open(outputFileName, ios::binary);
 
   // Write out the frequencies in the output file for decoding
+  cout << "Writing to file \"" << outputFileName << "\"...";
   for (int i = 0; i < 256; i++) {
     outputFile << freqs[i] << endl;
   }
@@ -61,23 +78,24 @@ int main(int argc, char* argv[])
   // Reopen the input file again
   ifstream secondPass;
   secondPass.open(inputFileName, ios::binary);
-
-  BitOutputStream bostream(outputFile); 
+  BitOutputStream bostream(outputFile);
 
   // Read in each byte and "encode" it
-  while (!inputFile.eof()) {
-    char character = secondPass.get();
-    buffer = (byte) character;
-    huffman.encode(buffer, bostream);
+  while (1) {
+    next = secondPass.get();
+    if (secondPass.eof()) break;
 
     // Write the encoded symbol to output file
-    //huffman.encode((byte) next, outputFile);
+    huffman.encode((unsigned char) next, bostream);
   }
+
+  // Ensure all bytes are written
   bostream.flush();
 
   // Close input and output streams
   secondPass.close();
   outputFile.close();
+  cout << "done." << endl;
 
   return 0;
 }

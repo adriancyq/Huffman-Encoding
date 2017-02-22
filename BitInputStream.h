@@ -10,8 +10,7 @@
 #include <iostream>
 using namespace std;
 
-class BitInputStream
-{
+class BitInputStream {
   private:
     unsigned char buffer;   // Bitwise buffer (one byte)
     int numBits;            // Number of bits that have been read from buffer

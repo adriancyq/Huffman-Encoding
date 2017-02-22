@@ -25,53 +25,60 @@ int main(int argc, char* argv[])
   }
 
   ifstream inputFile;                   // Input stream
-  //int next;                             // Next char in the input stream
+  int next;                             // Next char in the input stream
+  int totalBytes = 0;                   // Total number of chars to be decoded
+  int totalUniqueSymbols = 0;           // Total number of unique symbols
   vector<int> freqs(256, 0);            // Count of each char found
 
   // Open input filestream
   string inputFileName = argv[1];
   inputFile.open(inputFileName, ios::binary);
 
-  int n; //change
-  byte buffer;
-  int total = 0; 
   // Reconstruct the freqs vector to reconstruct the Huffman tree
-  for (int i = 0; i < freqs.size(); i++) {
-    inputFile >> n;
-    if (!inputFile.good()){
-      cout << "Error reading file header." << endl;
-      cout << "please check \"" << inputFileName << "\" was compressed properly and try again." << endl;
-      inputFile.close();
-    } 
-    freqs[i] = n;
-    total += n;
+  cout << "Reading header from file \"" << inputFileName << "\"... ";
+  for (int i = 0; i < 256; i++) {
+    inputFile >> next;
+    freqs[i] = next;
+
+    // Found an occurring char to decode
+    if (next > 0) {
+      totalBytes += next;
+      totalUniqueSymbols++;
+      cerr << "Character " << i << ": " << next << endl;
+    }
   }
 
+  // INFO: Print stats on input file
+  cout << "done." << endl;
+  cout << "Uncompressed file will have " << totalUniqueSymbols
+        << " unique symbols and size " << totalBytes << " bytes." << endl;
+
   // Reconstruct the Huffman tree
+  cout << "Building Huffman code tree... ";
   HCTree huffman;
   huffman.build(freqs);
+  cout << "done." << endl;
 
   // Open the output file for writing
   ofstream outputFile;                  // Output stream
   string outputFileName = argv[2];      // Name of output file
+  cout << "Writing to file \"" << outputFileName << "\"... ";
   outputFile.open(outputFileName, ios::binary);
-  //change
-  if (outputFile.fail()) {
-    cout << "Error: failed to open output stream!" << endl;
-    cout << "please check write permissions and try again." << endl;
-    return -1;
-  }
-
   BitInputStream bistream(inputFile);
 
-  //change
-  for (int i =0; i < total; i++){
-    buffer = huffman.decode(bistream);
-    if (buffer == (byte)-1) break;
-    outputFile.put(buffer);
+  // FIXME Gets the last newline character after the 256th frequency
+  inputFile.get();
+  
+  // Read all expected bytes
+  for (int i = 0; i < totalBytes; i++) {
+    if (inputFile.eof()) { break; }
+
+    // Decode and write to output
+    outputFile << (unsigned char) huffman.decode(bistream);
   }
 
   // Close input and output streams
+  cout << "done." << endl;
   inputFile.close();
   outputFile.close();
   return 0;

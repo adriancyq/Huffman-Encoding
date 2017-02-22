@@ -8,7 +8,6 @@
 * well as encoding and decoding.
 */
 
-#include "HCNode.h"
 #include "HCTree.h"
 #include <queue>
 #include <stack>
