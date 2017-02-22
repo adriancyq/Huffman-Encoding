@@ -1,5 +1,5 @@
 /*
-* File:         compress.cpp
+* File:         compresschk.cpp
 * Authors:      Jonathan Chiu (A12113428), Adrian Cordova (A12010305)
 * Class:        CSE 100, Winter 2017
 * Date:         2/15/2017
