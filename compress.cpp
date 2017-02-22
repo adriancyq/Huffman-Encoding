@@ -13,6 +13,7 @@
 #include <vector>
 #include "HCTree.h"
 #include "HCNode.h"
+
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -24,17 +25,19 @@ int main(int argc, char* argv[])
   }
 
   ifstream inputFile;                   // Input stream
-  int next;                             // Next char in the input stream
+  int next;   
+  byte buffer;                          // Next char in the input stream
   vector<int> freqs(256, 0);            // Count of each char found
 
   // Open input filestream
   string inputFileName = argv[1];
-  inputFile.open(inputFileName);
+  inputFile.open(inputFileName, ios::binary);
+  BitInputStream bistream(inputFile);
 
-  // Read file
-  while (1) {
-    next = inputFile.get();
-    if (inputFile.eof()) break;
+  // Read file change
+  while (!inputFile.eof()) {
+    buffer = inputFile.get();
+    next = (int)buffer;
     freqs[next]++;
   }
 
@@ -48,7 +51,7 @@ int main(int argc, char* argv[])
   // Open output filestream
   ofstream outputFile;                  // Output stream
   string outputFileName = argv[2];      // Name of output file
-  outputFile.open(outputFileName);
+  outputFile.open(outputFileName, ios::binary);
 
   // Write out the frequencies in the output file for decoding
   for (int i = 0; i < 256; i++) {
@@ -57,16 +60,20 @@ int main(int argc, char* argv[])
 
   // Reopen the input file again
   ifstream secondPass;
-  secondPass.open(inputFileName);
+  secondPass.open(inputFileName, ios::binary);
+
+  BitOutputStream bostream(outputFile); 
 
   // Read in each byte and "encode" it
-  while (1) {
-    next = secondPass.get();
-    if (secondPass.eof()) break;
+  while (!inputFile.eof()) {
+    char character = secondPass.get();
+    buffer = (byte) character;
+    huffman.encode(buffer, bostream);
 
     // Write the encoded symbol to output file
-    huffman.encode((byte) next, outputFile);
+    //huffman.encode((byte) next, outputFile);
   }
+  bostream.flush();
 
   // Close input and output streams
   secondPass.close();

@@ -13,6 +13,8 @@
 #include "HCTree.h"
 #include "HCNode.h"
 
+
+using namespace std;
 int main(int argc, char* argv[])
 {
 
@@ -23,18 +25,26 @@ int main(int argc, char* argv[])
   }
 
   ifstream inputFile;                   // Input stream
-  int next;                             // Next char in the input stream
+  //int next;                             // Next char in the input stream
   vector<int> freqs(256, 0);            // Count of each char found
 
   // Open input filestream
   string inputFileName = argv[1];
-  inputFile.open(inputFileName);
+  inputFile.open(inputFileName, ios::binary);
 
+  int n; //change
+  byte buffer;
+  int total = 0; 
   // Reconstruct the freqs vector to reconstruct the Huffman tree
-  for (int i = 0; i < 256; i++) {
-    inputFile >> next;
-    if (inputFile.eof()) break;
-    freqs[i] = next;
+  for (int i = 0; i < freqs.size(); i++) {
+    inputFile >> n;
+    if (!inputFile.good()){
+      cout << "Error reading file header." << endl;
+      cout << "please check \"" << inputFileName << "\" was compressed properly and try again." << endl;
+      inputFile.close();
+    } 
+    freqs[i] = n;
+    total += n;
   }
 
   // Reconstruct the Huffman tree
@@ -44,14 +54,21 @@ int main(int argc, char* argv[])
   // Open the output file for writing
   ofstream outputFile;                  // Output stream
   string outputFileName = argv[2];      // Name of output file
-  outputFile.open(outputFileName);
+  outputFile.open(outputFileName, ios::binary);
+  //change
+  if (outputFile.fail()) {
+    cout << "Error: failed to open output stream!" << endl;
+    cout << "please check write permissions and try again." << endl;
+    return -1;
+  }
 
-  while (1) {
+  BitInputStream bistream(inputFile);
 
-    // Read the next byte
-    int result = huffman.decode(inputFile);
-    if (result == -1) break;
-    outputFile << (byte) result;
+  //change
+  for (int i =0; i < total; i++){
+    buffer = huffman.decode(bistream);
+    if (buffer == (byte)-1) break;
+    outputFile.put(buffer);
   }
 
   // Close input and output streams

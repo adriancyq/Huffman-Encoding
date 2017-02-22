@@ -9,6 +9,7 @@
 #ifndef HCNODE_H
 #define HCNODE_H
 
+
 #include <iostream>
 
 typedef unsigned char byte;
