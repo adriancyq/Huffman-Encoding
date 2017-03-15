@@ -1,6 +1,6 @@
 /*
 * File:         HCNode.h
-* Authors:      Jonathan Chiu (A12113428), Adrian Cordova (A12010305)
+* Authors:      Jonathan Chiu, Adrian Cordova
 * Class:        CSE 100, Winter 2017
 * Date:         2/15/2017
 *
